@@ -1,4 +1,4 @@
-package com.aditya.rest.webservices.RestFulClient;
+package com.aditya.rest.webservices.helper;
 
 /**
  * Hello world!
