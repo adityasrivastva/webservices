@@ -1,5 +1,6 @@
 package com.api.rest.api.helper.rest_apiframework;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -15,7 +17,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import com.api.rest.api.helper.model.RestResponse;
 
-public class PostRequest1 {
+public class PostRequest2 {
 	
 	/*
 	 * @param aggs Step 1:- Create the HTTP Get/ Http POST method 
@@ -27,21 +29,24 @@ public class PostRequest1 {
 	 */
 
 	public static void main(String[] args) {
-		String jsonBody= "{" +
-				 "\"BrandName\": \"Apple\","+
+		/*String jsonBody= "{" +
+				 "\"BrandName\": \"Dell\","+
 				 "\"Features\": {" + 
 				  "\"Feature\": [\"8GB RAM\","+
 				  "\"1TB Hard Drive\"]" +
 				 "},"+
 				 "\"Id\":" + (int)(1000 * (Math.random()))+","+
-				 "\"LaptopName\": \"Mac-Pro\"" +
-				"}";
+				 "\"LaptopName\": \"Latitude\"" +
+				"}";*/
 		HttpPost post = new HttpPost("http://localhost:9090/laptop-bag/webapi/api/add");
 		 
 		try(CloseableHttpClient client= HttpClientBuilder.create().build()) {
 			post.addHeader("Content-Type", "application/json");
 			post.addHeader("Accept", "application/json");
-			StringEntity data=new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
+			//StringEntity data=new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
+			//post.setEntity(data);
+			File file= new File("TestDataFile");
+			FileEntity data= new FileEntity(file, ContentType.APPLICATION_JSON);
 			post.setEntity(data);
 			CloseableHttpResponse response=client.execute(post);
 			ResponseHandler<String> handler= new BasicResponseHandler();

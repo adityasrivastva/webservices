@@ -21,7 +21,7 @@ public class TestGetMethod {
 		
 		String url= "http://localhost:9090/laptop-bag/webapi/api/ping/Aditya";
 		
-		RestResponse response= RestApiHelper1.performGetRequest(url,null);
+		RestResponse response= RestApiHelper.performGetRequest(url,null);
 		
 		Assert.assertEquals(HttpStatus.SC_OK, response.getStatusCode());
 		Assert.assertEquals("Hi! Aditya", response.getResponseBody());
@@ -36,7 +36,7 @@ public class TestGetMethod {
 		Map<String, String> headers= new HashMap<>();
 		headers.put("Accept", "application/json");
 		
-		RestResponse response= RestApiHelper1.performGetRequest(url,headers);
+		RestResponse response= RestApiHelper.performGetRequest(url,headers);
 		System.out.println(response);
 		Assert.assertTrue("Expected Status Code not preset",(HttpStatus.SC_OK==response.getStatusCode()) || (HttpStatus.SC_NO_CONTENT==response.getStatusCode()));
 	}
@@ -49,7 +49,7 @@ public class TestGetMethod {
 		Map<String, String> headers= new HashMap<>();
 		headers.put("Accept", "application/json");
 		
-		RestResponse response= RestApiHelper1.performGetRequest(url,headers);
+		RestResponse response= RestApiHelper.performGetRequest(url,headers);
 		Assert.assertTrue("Expected Status Code not preset",(HttpStatus.SC_OK==response.getStatusCode()) || (HttpStatus.SC_NOT_FOUND==response.getStatusCode()));
 		//System.out.println(response.getResponseBody());
 		

@@ -1,6 +1,7 @@
 package com.api.rest.api.helper.rest_apiframework;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.http.client.ResponseHandler;
@@ -13,9 +14,10 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+import com.api.rest.api.helper.model.ResponseBody;
 import com.api.rest.api.helper.model.RestResponse;
 
-public class PostRequest1 {
+public class PostRequest3 {
 	
 	/*
 	 * @param aggs Step 1:- Create the HTTP Get/ Http POST method 
@@ -36,7 +38,7 @@ public class PostRequest1 {
 				 "\"Id\":" + (int)(1000 * (Math.random()))+","+
 				 "\"LaptopName\": \"Mac-Pro\"" +
 				"}";
-		HttpPost post = new HttpPost("http://localhost:9090/laptop-bag/webapi/api/add");
+		/*HttpPost post = new HttpPost("http://localhost:9090/laptop-bag/webapi/api/add");
 		 
 		try(CloseableHttpClient client= HttpClientBuilder.create().build()) {
 			post.addHeader("Content-Type", "application/json");
@@ -51,20 +53,16 @@ public class PostRequest1 {
 			client.execute(post);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-
-		/*
-		RestResponse response=RestApiHelper1.performGetRequest("http://localhost:9090/laptop-bag/webapi/api/ping/Aditya",null);
-		System.out.println(response);
-		System.out.println(response.getStatusCode());
-		System.out.println(response.getResponseBody());
-		String url= "http://localhost:9090/laptop-bag/webapi/api/all";
-		Map<String, String> headers= new HashMap<>();
+		}*/
+		
+		Map<String, String> headers= new LinkedHashMap<>();
 		headers.put("Accept", "application/json");
-		response= RestApiHelper1.performGetRequest(url,headers);
+		headers.put("Content-Type", "application/json");
+		
+		RestResponse response=RestApiHelper.performPostRequest("http://localhost:9090/laptop-bag/webapi/api/add", jsonBody, headers);
 		System.out.println(response);
-		*/
+		
+
+		
 	}
-
-
 }

@@ -51,14 +51,14 @@ public class GetRequest5 {
 		}*/
 
 		
-		RestResponse response=RestApiHelper1.performGetRequest("http://localhost:9090/laptop-bag/webapi/api/ping/Aditya",null);
+		RestResponse response=RestApiHelper.performGetRequest("http://localhost:9090/laptop-bag/webapi/api/ping/Aditya",null);
 		System.out.println(response);
 		System.out.println(response.getStatusCode());
 		System.out.println(response.getResponseBody());
 		String url= "http://localhost:9090/laptop-bag/webapi/api/all";
 		Map<String, String> headers= new HashMap<>();
 		headers.put("Accept", "application/json");
-		response= RestApiHelper1.performGetRequest(url,headers);
+		response= RestApiHelper.performGetRequest(url,headers);
 		System.out.println(response);
 		
 	}
