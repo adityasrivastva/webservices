@@ -5,20 +5,21 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 
-import javax.management.RuntimeErrorException;
-
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicHeader;
 
 import com.api.rest.api.helper.model.RestResponse;
 
@@ -49,15 +50,52 @@ public class RestApiHelper {
 		
 	}
 	
+	
+	private static Header[] getCustomHeaders(Map<String, String> headers) {
+		
+		Header[] customHeaders= new Header[headers.size()];
+		int i=0;
+		for (String	 key : headers.keySet()) {
+			customHeaders[i++] =new BasicHeader(key, headers.get(key));
+		}
+		
+		return customHeaders;
+	}
+	
+	private static RestResponse performRequest(HttpUriRequest method) {
+		
+		CloseableHttpResponse response=null;
+		try(CloseableHttpClient client= HttpClientBuilder.create().build()){
+			response= client.execute(method);
+			ResponseHandler<String> body= new BasicResponseHandler();
+			return new RestResponse(response.getStatusLine().getStatusCode(), 
+					body.handleResponse(response));
+		} catch (Exception e) {
+			if (e instanceof HttpResponseException) {
+				return new RestResponse(response.getStatusLine().getStatusCode(), 
+						e.getMessage());
+			}
+			throw new RuntimeException(e.getMessage(), e);
+		}
+		
+	}
+	
 	public static RestResponse performGetRequest(URI uri,Map<String, String> headers) {
 		HttpGet get= new HttpGet(uri);
 		//Added Header using [HttpRequestBase]->(HttpGet) methods addHeader(String,String) (Method of HttpMessage interface)
 		if (headers!=null) {
-			for (String	 str : headers.keySet()) {
-				get.addHeader(str, headers.get(str));
-			}
+			//Replaced By getCustomerHeaders() method
+			/*for (String	 str : headers.keySet()) {
+				get.addHeader(str, headers.get(str));	
+			}*/
+			
+			get.setHeaders(getCustomHeaders(headers));
 		}
-		CloseableHttpResponse response=null;
+		
+		/*
+		 * Replaced by performRequest()
+		 * */
+		/*CloseableHttpResponse response=null;
 		try(CloseableHttpClient client= HttpClientBuilder.create().build()){
 			response= client.execute(get);
 			ResponseHandler<String> body= new BasicResponseHandler();
@@ -69,19 +107,28 @@ public class RestApiHelper {
 						e.getMessage());
 			}
 			throw new RuntimeException(e.getMessage(), e);
-		}
+		}*/
+		
+		return performRequest(get);
 	}
 	
 	public static RestResponse performPostRequest(String url, String content, Map<String, String> headers) {
 		CloseableHttpResponse response=null;
 		HttpPost post= new HttpPost(url);
 		if (headers!=null) {
-			for (String	 key : headers.keySet()) {
+			//Replaced By getCustomerHeaders() method
+			/*for (String	 key : headers.keySet()) {  //Replaced By getCustomerHeaders() method
 				post.addHeader(key, headers.get(key));
-			}
+			}*/
+			post.setHeaders(getCustomHeaders(headers));
 		}
 		post.setEntity(new StringEntity(content, ContentType.APPLICATION_JSON));
-		try(CloseableHttpClient client= HttpClientBuilder.create().build()) {
+		
+		
+		/*
+		 * Replaced by performRequest()
+		 * */
+		/*try(CloseableHttpClient client= HttpClientBuilder.create().build()) {
 			response= client.execute(post);
 			
 			ResponseHandler<String> handler= new BasicResponseHandler();
@@ -91,7 +138,9 @@ public class RestApiHelper {
 				return new RestResponse(response.getStatusLine().getStatusCode(), "");
 			}
 			throw new RuntimeException(e.getMessage(), e);
-		}
+		}*/
+		
+		return performRequest(post);
 		
 		
 	}
@@ -115,12 +164,20 @@ public class RestApiHelper {
 		CloseableHttpResponse response=null;
 		HttpPost post= new HttpPost(url);
 		if (headers!=null) {
+			//Replaced By getCustomerHeaders() method
+			/*
 			for (String	 key : headers.keySet()) {
 				post.addHeader(key, headers.get(key));
-			}
+			}*/
+				
+			post.setHeaders(getCustomHeaders(headers));
 		}
 		post.setEntity(getHttpEntity(content, type));
-		try(CloseableHttpClient client= HttpClientBuilder.create().build()) {
+		
+		/*
+		 * Replaced by performRequest()
+		 * */
+		/*try(CloseableHttpClient client= HttpClientBuilder.create().build()) {
 			response= client.execute(post);
 			
 			ResponseHandler<String> handler= new BasicResponseHandler();
@@ -130,10 +187,14 @@ public class RestApiHelper {
 				return new RestResponse(response.getStatusLine().getStatusCode(), "");
 			}
 			throw new RuntimeException(e.getMessage(), e);
-		}
+		}*/
 		
-		
+		return performRequest(post);
 	}
 	
 	//Genric method to support different HttpEntity End
 }
+	
+	
+	
+
