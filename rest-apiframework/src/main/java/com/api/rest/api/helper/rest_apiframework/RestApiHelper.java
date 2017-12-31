@@ -124,29 +124,51 @@ public class RestApiHelper {
 
 		return performRequest(post);
 	}
-	
+
 	public static RestResponse performDeleteRequest(String url, Map<String, String> headers) {
-		
+
 		try {
 			return performDeleteRequest(new URI(url), headers);
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
-		
-		
+
 	}
-	
-public static RestResponse performDeleteRequest(URI uri, Map<String, String> headers) {
-		
-		HttpUriRequest delete= RequestBuilder.delete(uri).build();
-		
+
+	public static RestResponse performDeleteRequest(URI uri, Map<String, String> headers) {
+
+		HttpUriRequest delete = RequestBuilder.delete(uri).build();
+
 		if (headers != null) {
 			delete.setHeaders(getCustomHeaders(headers));
 		}
-		
+
 		return performRequest(delete);
-		
+
 	}
 	
+	public static RestResponse performPutRequest(URI uri, Object content, ContentType type,
+			Map<String, String> headers) {
+		
+		HttpUriRequest put=RequestBuilder.put(uri).setEntity(getHttpEntity(content, type)).build();
+
+		//HttpPost put = new HttpPost(url);
+		if (headers != null) {
+			put.setHeaders(getCustomHeaders(headers));
+		}
+		//put.setEntity(getHttpEntity(content, type));
+
+		return performRequest(put);
+	}
 	
+	public static RestResponse performPutRequest(String url, Object content, ContentType type,
+			Map<String, String> headers) {
+		
+		try {
+			return performPutRequest(new URI(url), content, type, headers);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+
 }

@@ -1,0 +1,22 @@
+"<Laptop>"
+    
+   + "<BrandName>Dell</BrandName>"
+   + "<Features>"
+   +   	"<Feature>8GB RAM</Feature>"
+   +  	"<Feature>1TB Hard Drive</Feature>"
+   + "</Features>"
+   + "<Id>126</Id>"
+   + "<LaptopName>Latitude</LaptopName>"
++"</Laptop>"
+
+
+
+String jsonBody= "{" +
+				 "\"BrandName\": \"Apple\","+
+				 "\"Features\": {" + 
+				  "\"Feature\": [\"8GB RAM\","+
+				  "\"1TB Hard Drive\"]" +
+				 "},"+
+				 "\"Id\":" + (int)(1000 * (Math.random()))+","+
+				 "\"LaptopName\": \"Mac-Pro\"" +
+				"}";
