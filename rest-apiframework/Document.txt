@@ -1,0 +1,256 @@
+URL:-
+https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/
+
+Creating Get Request 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Step 1:- Create the HTTP Get method
+
+
+	
+HttpGet
+
+Package Structure 
+
+
+
+
+
+
+
+
+
+
+
+All Implemented Interfaces: 
+Cloneable, AbortableHttpRequest, Configurable, HttpExecutionAware, HttpUriRequest, HttpMessage, HttpRequest
+
+Class:-
+
+public class HttpGet extends HttpRequestBase{
+
+
+	//Constructors
+	
+	HttpGet();
+	HttpGet(String uri);
+	HttpGet(URI uri) 
+	
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Step 2:- Create the HTTP Client
+
+
+
+Package Structure:
+
+
+
+
+
+All Known Implementing Classes: 
+
+AbstractHttpClient, AutoRetryHttpClient, CloseableHttpClient, ContentEncodingHttpClient, DecompressingHttpClient, DefaultHttpClient, SystemDefaultHttpClient 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+De serialization of XML Response 
+
+1. Add Maven dependency of  Jackson Dataformat XML in pom.xml.
+
+	
+
+
+
+
+
+
+
+
+
+2. Steps to de-serialize
+
+a) Create Object of class XmlMapper.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+b) And use this object for the de-serialization process.
+	Methods:-
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C) Call
+	xml.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+
+To handle list while  de-serialize of Json.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Creating Delete Request:
+HttpDelete 
+
+NOTE:-RequestBuilder:-  To build any kind of request method(HttpGet, HttpPost, HttpDelete, HttpPut)
+
+
+
