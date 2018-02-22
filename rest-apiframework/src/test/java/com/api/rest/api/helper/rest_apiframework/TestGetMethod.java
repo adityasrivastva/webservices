@@ -3,6 +3,7 @@ package com.api.rest.api.helper.rest_apiframework;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
@@ -69,11 +70,17 @@ public class TestGetMethod {
 		Assert.assertEquals("Mac-Book", body.LaptopName);
 		Assert.assertEquals("132", body.Id);
 		
-		
-		
-		
-		
-		
+	}
+	
+	@Test
+	public void testSecureGet() {
+		//Adding Headers to the Request
+		Map<String, String> headers= new HashMap<>();
+		headers.put("Accept", "application/json");
+		//headers.put("Authorization", "Basic YWRtaW46d2VsY29tZQ==");
+		headers.put("Authorization", Base64.encodeBase64String("admin:welcome".getBytes()));
+		RestResponse response=RestApiHelper.performGetRequest("http://localhost:9090/laptop-bag/webapi/secure/all", headers);
+		System.out.println(response.toString());
 		
 	}
 
