@@ -13,7 +13,7 @@ import com.api.rest.api.helper.model.RestResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class TestDeleteAndPutWithSSL2 {
+public class TestDeleteAndPutWithSSL {
 	
 	
 	@Test
