@@ -36,6 +36,7 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.TrustStrategy;
 
+import com.api.rest.api.helper.model.RequestStatus;
 import com.api.rest.api.helper.model.RestResponse;
 
 public class HttpsAsyncClientHelper {
@@ -86,7 +87,7 @@ public class HttpsAsyncClientHelper {
 		Future<HttpResponse> response= null;
 		try (CloseableHttpAsyncClient client = getHttpAsyncClient(context)) {
 			client.start();
-			response=client.execute(method, null);
+			response=client.execute(method, new RequestStatus());
 			ResponseHandler<String> handler= new BasicResponseHandler();
 			return new RestResponse(response.get().getStatusLine().getStatusCode(), handler.handleResponse(response.get()));
 			
@@ -120,22 +121,149 @@ public class HttpsAsyncClientHelper {
 
 	}
 
-	/*public static RestResponse performPostWithSSL(URI uri, Object content, ContentType type,
+	public static RestResponse performPostAsync(URI uri, Object content, ContentType type,
 			Map<String, String> headers) {
 		HttpUriRequest post = RequestBuilder.post(uri).setEntity(getHttpEntity(content, type)).build();
 		if (headers != null)
 			post.setHeaders(getCustomHeaders(headers));
-		return performRequest(post);
+		try {
+			return performRequest(post,null);
+		} catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
 	}
-	public static RestResponse performPostWithSSL(String uri, Object content, ContentType type,
+	public static RestResponse performPostAsync(String uri, Object content, ContentType type,
 			Map<String, String> headers) {
 		try {
-			return performPostWithSSL(new URI(uri), content, type, headers);
+			return performPostAsync(new URI(uri), content, type, headers);
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 	
+	public static RestResponse performPutAsync(URI uri, Object content, ContentType type,
+			Map<String, String> headers) {
+		HttpUriRequest put = RequestBuilder.put(uri).setEntity(getHttpEntity(content, type)).build();
+		if (headers != null)
+			put.setHeaders(getCustomHeaders(headers));
+		try {
+			return performRequest(put,null);
+		} catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	public static RestResponse performPutAsync(String uri, Object content, ContentType type,
+			Map<String, String> headers) {
+		try {
+			return performPutAsync(new URI(uri), content, type, headers);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
+	public static RestResponse performDeleteAsync(URI uri, Map<String, String> headers) {
+		HttpUriRequest delete = RequestBuilder.delete(uri).build();
+		if (headers != null)
+			delete.setHeaders(getCustomHeaders(headers));
+		try {
+			return performRequest(delete,null);
+		} catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	public static RestResponse performDeleteAsync(String uri,Map<String, String> headers) {
+		try {
+			return performDeleteAsync(new URI(uri), headers);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
+	
+	
+//----------------------------------------------------------------------
+	public static RestResponse performGetSSLRequestAsync(String uri, Map<String, String> headers) {
+
+		try {
+			return performGetSSLRequestAsync(new URI(uri), headers);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+
+	}
+
+	public static RestResponse performGetSSLRequestAsync(URI uri, Map<String, String> headers) {
+		HttpGet get = new HttpGet(uri);
+		if (headers != null)
+			get.setHeaders(getCustomHeaders(headers));
+		try {
+			return performRequest(get,getSSLContext());
+		} catch (InterruptedException | ExecutionException | KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		} 
+
+	}
+
+	public static RestResponse performPostSSLAsync(URI uri, Object content, ContentType type,
+			Map<String, String> headers) {
+		HttpUriRequest post = RequestBuilder.post(uri).setEntity(getHttpEntity(content, type)).build();
+		if (headers != null)
+			post.setHeaders(getCustomHeaders(headers));
+		try {
+			return performRequest(post,getSSLContext());
+		} catch (InterruptedException | ExecutionException | KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	public static RestResponse performPostSSLAsync(String uri, Object content, ContentType type,
+			Map<String, String> headers) {
+		try {
+			return performPostSSLAsync(new URI(uri), content, type, headers);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
+	public static RestResponse performPutSSLAsync(URI uri, Object content, ContentType type,
+			Map<String, String> headers) {
+		HttpUriRequest put = RequestBuilder.put(uri).setEntity(getHttpEntity(content, type)).build();
+		if (headers != null)
+			put.setHeaders(getCustomHeaders(headers));
+		try {
+			return performRequest(put,getSSLContext());
+		} catch (InterruptedException | ExecutionException | KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	public static RestResponse performPutSSLAsync(String uri, Object content, ContentType type,
+			Map<String, String> headers) {
+		try {
+			return performPutSSLAsync(new URI(uri), content, type, headers);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
+	public static RestResponse performDeleteSSLAsync(URI uri, Map<String, String> headers) {
+		HttpUriRequest delete = RequestBuilder.delete(uri).build();
+		if (headers != null)
+			delete.setHeaders(getCustomHeaders(headers));
+		try {
+			return performRequest(delete,getSSLContext());
+		} catch (InterruptedException | ExecutionException | KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	public static RestResponse performDeleteSSLAsync(String uri,Map<String, String> headers) {
+		try {
+			return performDeleteSSLAsync(new URI(uri), headers);
+		} catch (URISyntaxException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
+	
+	/*
 	public static RestResponse performPutWithSSL(URI uri, Object content, ContentType type,
 			Map<String, String> headers) {
 		HttpUriRequest put = RequestBuilder.put(uri).setEntity(getHttpEntity(content, type)).build();
