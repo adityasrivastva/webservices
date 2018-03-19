@@ -1,5 +1,6 @@
 package com.api.rest.api.helper.rest_apiframework;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class PostRequest1 {
 	 * 
 	 */
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		String jsonBody= "{" +
 				 "\"BrandName\": \"Apple\","+
 				 "\"Features\": {" + 
@@ -37,20 +38,27 @@ public class PostRequest1 {
 				 "\"LaptopName\": \"Mac-Pro\"" +
 				"}";
 		HttpPost post = new HttpPost("http://localhost:9090/laptop-bag/webapi/api/add");
+		CloseableHttpResponse response=null;
 		 
 		try(CloseableHttpClient client= HttpClientBuilder.create().build()) {
 			post.addHeader("Content-Type", "application/json");
 			post.addHeader("Accept", "application/json");
 			StringEntity data=new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
 			post.setEntity(data);
-			CloseableHttpResponse response=client.execute(post);
+			response=client.execute(post);
+			System.out.println(response);
 			ResponseHandler<String> handler= new BasicResponseHandler();
 			
-			RestResponse restResponse= new RestResponse(response.getStatusLine().getStatusCode(), handler.handleResponse(response) );
+			RestResponse restResponse= new RestResponse(response.getStatusLine().getStatusCode(), 
+					handler.handleResponse(response) );
 			System.out.println(restResponse.toString());
 			client.execute(post);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			if (response!=null) {
+				response.close();
+			}
 		}
 
 		/*
